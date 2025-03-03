@@ -1,35 +1,30 @@
-# Parameters
 mu <- 5
 sigma <- 2
 n <- 30
 N_sim <- 1000
 
-# Initialize vectors
-sample_vars <- numeric(N_sim)  # Unbiased variances
-biased_vars <- numeric(N_sim)  # Biased variances
+sample_vars <- numeric(N_sim)
+biased_vars <- numeric(N_sim)
 
-# Simulation
-set.seed(123)  # For reproducibility
+set.seed(123)
 for (i in 1:N_sim) {
-  data <- rnorm(n, mean = mu, sd = sigma)  # Generate random sample
-  sample_vars[i] <- var(data)  # Unbiased variance
-  biased_vars[i] <- sum((data - mean(data))^2) / n  # Biased variance
+  data <- rnorm(n, mean = mu, sd = sigma)
+  sample_vars[i] <- var(data)
+  biased_vars[i] <- sum((data - mean(data))^2) / n
 }
 
-# Graphical Output
-par(mfrow = c(1, 2))  # Set up a 1x2 grid for plots
+cat("Unbiased Variance Mean:", mean(sample_vars), "SD:", sd(sample_vars), "\n")
+cat("Biased Variance Mean:", mean(biased_vars), "SD:", sd(biased_vars), "\n")
 
-# Histogram of unbiased variances
-hist(sample_vars, breaks = 30, col = "lightblue", 
-     main = "Unbiased Sample Variance", xlab = "Variance", border = "white")
-abline(v = sigma^2, col = "red", lwd = 2)  # True variance
+dev.new()  # Open a new plot window
+par(mfrow = c(1, 2))
 
-# Histogram of biased variances
-hist(biased_vars, breaks = 30, col = "lightgreen", 
-     main = "Biased Sample Variance", xlab = "Variance", border = "white")
-abline(v = sigma^2, col = "red", lwd = 2)  # True variance
+hist(sample_vars, breaks = 20, col = "lightblue", 
+     main = "Unbiased Sample Variance", xlab = "Variance", border = "white",
+     xlim = c(0, 35), ylim = c(0, 150))
+abline(v = sigma^2, col = "red", lwd = 2)
 
-# Summary Statistics
-cat("Mean of unbiased variances:", mean(sample_vars), "\n")
-cat("Mean of biased variances:", mean(biased_vars), "\n")
-cat("True variance (sigma^2):", sigma^2, "\n")
+hist(biased_vars, breaks = 20, col = "lightgreen", 
+     main = "Biased Sample Variance", xlab = "Variance", border = "white",
+     xlim = c(0, 35), ylim = c(0, 150))
+abline(v = sigma^2, col = "red", lwd = 2)
